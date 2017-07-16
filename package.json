@@ -41,7 +41,13 @@
   },
   "scripts": {
     "test": "mocha",
-    "docs": "./bin/docs"
+    "docs": "./bin/docs",
+    "start": "npm run build && npm run watch",
+    "build": "npm run build-ts && npm run tslint",
+    "serve": "node dist/server.js",
+    "test": "jest --forceExit",
+    "build-ts": "tsc",
+    "tslint": "tslint -c tslint.json -p tsconfig.json"
   },
   "directories": {
     "test": "test"
