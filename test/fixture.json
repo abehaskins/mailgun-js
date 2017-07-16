@@ -26,11 +26,11 @@
   },
   "route": {
     "description": "Sample test route",
-    "expression": "match_recipient('.*@sandbox77047.mailgun.org')",
+    "expression": "match_recipient('.*@sandbox297ed97a15454959807e8e7e32206238.mailgun.org')",
     "action": "forward('http://myhost.com/messages/')"
   },
   "mailingList": {
-    "address": "devtest@sandbox77047.mailgun.org",
+    "address": "devtest@sandbox297ed97a15454959807e8e7e32206238.mailgun.org",
     "name": "MailgunDev",
     "description": "Mailgun developers list"
   },
@@ -39,10 +39,10 @@
     "smtp_password": "testpassword1"
   },
   "existing_domain": {
-    "name": "sandbox77047.mailgun.org"
+    "name": "sandbox297ed97a15454959807e8e7e32206238.mailgun.org"
   },
   "credentials": {
-    "login": "user01@sandbox77047.mailgun.org",
+    "login": "user01@sandbox297ed97a15454959807e8e7e32206238.mailgun.org",
     "password": "12345"
   },
   "unsubscribe": {

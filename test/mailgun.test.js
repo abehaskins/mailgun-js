@@ -8,13 +8,12 @@ var mailcomposer = require("mailcomposer");
 var request = require("request");
 
 var mailgun = require('../lib/mailgun')({apiKey: auth.api_key, domain: auth.domain});
-
 var routeId = -1;
 
 module.exports = {
 
   beforeEach: function (done) {
-    setTimeout(done, 500);
+    setTimeout(done, 100);
   },
 
   //
