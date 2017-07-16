@@ -85,7 +85,7 @@ export class Mailgun {
   }
 
   getDomain(method: HTTPMethod, resource: string) {
-    var d = this.domain;
+    let d = this.domain;
 
     //filter out API calls that do not require a domain specified
     if ((resource.indexOf("/routes") >= 0)
@@ -103,11 +103,11 @@ export class Mailgun {
   }
 
   getRequestOptions(resource: string) {
-    var o = this.options;
+    let o = this.options;
 
     // use public API key if we have it for the routes that require it
     if (resource.indexOf("/address") >= 0 && this.publicApiKey) {
-      var copy = Object.assign({}, this.options);
+      const copy = Object.assign({}, this.options);
       copy.auth = [this.username, this.publicApiKey].join(":");
       o = copy;
     }
@@ -116,41 +116,41 @@ export class Mailgun {
   }
 
   request(method: HTTPMethod, resource: string, data: any, fn: Function) {
-    var fullpath = resource;
-    var domain = this.getDomain(method, resource);
+    let fullpath = resource;
+    const domain = this.getDomain(method, resource);
     if (domain) {
       fullpath = "/".concat(domain, resource);
     }
 
-    var req = new Request(this.options);
+    const req = new Request(this.options);
     return req.request(method, fullpath, data, fn);
   }
 
   post(path: string, data: any, fn: Function) {
-    var req = new Request(this.options);
+    const req = new Request(this.options);
     return req.request("POST", path, data, fn);
   }
 
   get(path: string, data: any, fn: Function) {
-    var req = new Request(this.options);
+    const req = new Request(this.options);
     return req.request("GET", path, data, fn);
   }
 
   delete(path: string, data: any, fn: Function) {
-    var req = new Request(this.options);
+    const req = new Request(this.options);
     return req.request("DELETE", path, data, fn);
   }
 
   put(path: string, data: any, fn: Function) {
-    var req = new Request(this.options);
+    const req = new Request(this.options);
     return req.request("PUT", path, data, fn);
   }
 
   validateWebhook(timestamp: string, token: string, signature: string) {
-    var self = this;
+    const self = this;
 
-    var adjustedTimestamp = parseInt(timestamp, 10) * 1000;
-    var fresh = (Math.abs(Date.now() - adjustedTimestamp) < mailgunExpirey);
+    const adjustedTimestamp = parseInt(timestamp, 10) * 1000;
+    const fresh = (Math.abs(Date.now() - adjustedTimestamp) < mailgunExpirey);
 
     if (!fresh) {
       if (!this.mute) {
@@ -190,18 +190,18 @@ export class Mailgun {
   }
 
   validate(address: string, fn, Function) {
-    var resource = `/address/validate`;
-    var options = this.getRequestOptions(resource);
+    const resource = `/address/validate`;
+    const options = this.getRequestOptions(resource);
 
-    var req = new Request(options);
+    const req = new Request(options);
     return req.request("GET", resource, { address }, fn);
   };
 
   parse(addresses: string[], fn: Function) {
-    var resource = `/address/parse`;
-    var options = this.getRequestOptions(resource);
+    const resource = `/address/parse`;
+    const options = this.getRequestOptions(resource);
 
-    var req = new Request(options);
+    const req = new Request(options);
     return req.request("GET", resource, { addresses }, fn);
   };
 };
