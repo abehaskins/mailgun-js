@@ -19,6 +19,7 @@
     "node": ">=4.0"
   },
   "main": "./lib/mailgun.js",
+  "types": "./lib/mailgun.d.ts",
   "dependencies": {
     "async": "~2.4.0",
     "debug": "~2.6.0",

@@ -9,7 +9,7 @@ import { Readable } from "stream";
 import { retry } from "async";
 
 import { Attachment } from "./attachment";
-import { APIOptions } from "./types";
+import { MailgunClientOptions } from "./types";
 
 const FormData = require("form-data");
 const promisifyCall = require("promisify-call");
@@ -45,7 +45,7 @@ export class Request {
   callback: Function;
   form: any;
 
-  constructor(options: APIOptions) {
+  constructor(options: MailgunClientOptions) {
     this.host = options.host;
     this.protocol = options.protocol;
     this.port = options.port;

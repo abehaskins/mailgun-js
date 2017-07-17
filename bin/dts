@@ -1,6 +1,10 @@
 #!/usr/bin/env node
 
 const templates = {
+    namespace: `declare module "{{name}}" {
+{{exported_declarations}}
+}\n\n
+{{other_declarations}}`,
     class: `declare class {{name}} {
 {{methods}}
 }`,
@@ -12,7 +16,7 @@ const classes = [];
 
 for (var name in definitions) {
     var data = definitions[name];
-    var title = name[0].toUpperCase() + name.slice(1, name.length);
+    var title = toTitle(name);
 
     methods.push(render(templates.method, {
         name,
@@ -20,20 +24,28 @@ for (var name in definitions) {
         args: ""
     }))
 
-    console.log(data.links);
     classes.push(render(templates.class, {
         name: title,
         methods: data.links.map((link) => {
-            var args = "{" + Object.keys(link.properties || {}).map((key) => {
-                var type_ = link.properties[key].type;
-                var required = (link.required || []).indexOf(key) == -1? "?" : "";
-                return `${key}${required}: ${type_}`;
-            }).join(", ") + "}";
+            const title = toCamelCase(link.title);
 
-            if (args == "{}") args = "";
+            var args = "opts: {" + Object.keys(link.properties || {}).map((key) => {
+                var title = toCamelCase(key);
+                var type_ = link.properties[key].type;
+
+                if (type_ == "array") {
+                    type_ = "any[]";
+                }
+
+                var required = (link.required || []).indexOf(key) == -1? "?" : "";
+                return `${title}${required}: ${type_}`;
+            }).join(", ") + "}, ";
+
+            if (args == "opts: {}, ") args = "";
+            args += "callback: Function";
 
             return render(templates.method, {
-                name: link.title,
+                name: title,
                 return_type: "any",
                 args
             });
@@ -41,15 +53,18 @@ for (var name in definitions) {
     }))
 }
 
-const dts = render(templates.class, {
-    name: "API",
+const exported_declarations = render(templates.class, {
+    name: "MailgunClient",
     methods: methods.join("\n")
 });
 
-console.log(dts);
-classes.forEach((clazz) => {
-    console.log(clazz);
-});
+const other_declarations = classes.join("\n\n");
+
+console.log(render(templates.namespace, {
+    name: "mailgun-js",
+    exported_declarations,
+    other_declarations
+}));
 
 function render(template, data) {
     Object.keys(data).forEach((key) => {
@@ -58,4 +73,15 @@ function render(template, data) {
         template = template.replace(re, value);
     });
     return template;
+}
+
+function toTitle(str) {
+    return str[0].toUpperCase() + str.slice(1, str.length);
+}
+
+function toCamelCase(str) {
+    return str.split("-").map((word, index) => {
+        if (index == 0) return word;
+        return toTitle(word);
+    }).join("");
 }

@@ -1,11 +1,11 @@
 import * as inflection from "inflection";
 import * as pathProxy from "path-proxy";
-import { API } from "./api";
+import { MailgunClient } from "./mailgun-client";
 
 const promisifyCall = require("promisify-call");
 
 class Builder {
-  baseObj: API;
+  baseObj: MailgunClient;
   resources: any;
 
   constructor(baseObj, resources) {

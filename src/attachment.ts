@@ -1,9 +1,9 @@
 import * as isStream from "is-stream";
 
 export interface AttachmentOptions {
-  filename: string;
-  contentType: string;
-  knownLength: string;
+  filename?: string;
+  contentType?: string;
+  knownLength?: string;
   data: any;
 }
 /**
@@ -20,9 +20,9 @@ export interface AttachmentOptions {
  * @constructor
  */
 export class Attachment {
-  filename: string;
-  contentType: string;
-  knownLength: string;
+  filename?: string;
+  contentType?: string;
+  knownLength?: string;
   data: any;
 
   constructor(options: AttachmentOptions) {

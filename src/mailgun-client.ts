@@ -7,13 +7,13 @@ import { build } from "./build";
 import { definitions as resources } from "./schema";
 import { HTTPMethod } from "./request";
 
-import { APIOptions } from "./types";
+import { MailgunClientOptions } from "./types";
 
 const mailgunExpirey = 15 * 60 * 1000;
 const mailgunHashType = "sha256";
 const mailgunSignatureEncoding = "hex";
 
-export class API {
+export class MailgunClient {
   username: string;
   apiKey: string;
   publicApiKey: string;
@@ -28,13 +28,13 @@ export class API {
   retry: number;
   proxy: string;
 
-  Mailgun = API;
+  Mailgun = MailgunClient;
   Attachment = Attachment;
 
-  options: APIOptions;
+  options: MailgunClientOptions;
   mailgunTokens: { [s: string]: boolean };
 
-  constructor(options: APIOptions) {
+  constructor(options: MailgunClientOptions) {
     if (!options.apiKey) {
       throw new Error("apiKey value must be defined!");
     }
@@ -65,7 +65,7 @@ export class API {
       proxy: this.proxy,
       timeout: this.timeout,
       retry: this.retry
-    } as APIOptions;
+    } as MailgunClientOptions;
 
     this.mailgunTokens = {};
   }
@@ -201,4 +201,4 @@ export class API {
   }
 }
 
-build(API, resources);
+build(MailgunClient, resources);

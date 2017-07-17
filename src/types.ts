@@ -1,8 +1,8 @@
-export interface APIOptions {
+export interface MailgunClientOptions {
   apiKey: string;
-  publicApiKey: string;
   domain: string;
-  timeout: number;
+  timeout?: number;
+  publicApiKey?: string;
   auth?: string;
   mute?: boolean;
   host?: string;
@@ -10,5 +10,5 @@ export interface APIOptions {
   protocol?: string;
   port?: number;
   retry?: number;
-  proxy: string;
+  proxy?: string;
 }
