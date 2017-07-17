@@ -1,0 +1,61 @@
+#!/usr/bin/env node
+
+const templates = {
+    class: `declare class {{name}} {
+{{methods}}
+}`,
+    method: `   {{name}}({{args}}): {{return_type}};`
+}
+const definitions = require("../src/schema").definitions;
+const methods = [];
+const classes = [];
+
+for (var name in definitions) {
+    var data = definitions[name];
+    var title = name[0].toUpperCase() + name.slice(1, name.length);
+
+    methods.push(render(templates.method, {
+        name,
+        return_type: title,
+        args: ""
+    }))
+
+    console.log(data.links);
+    classes.push(render(templates.class, {
+        name: title,
+        methods: data.links.map((link) => {
+            var args = "{" + Object.keys(link.properties || {}).map((key) => {
+                var type_ = link.properties[key].type;
+                var required = (link.required || []).indexOf(key) == -1? "?" : "";
+                return `${key}${required}: ${type_}`;
+            }).join(", ") + "}";
+
+            if (args == "{}") args = "";
+
+            return render(templates.method, {
+                name: link.title,
+                return_type: "any",
+                args
+            });
+        }).join("\n")
+    }))
+}
+
+const dts = render(templates.class, {
+    name: "API",
+    methods: methods.join("\n")
+});
+
+console.log(dts);
+classes.forEach((clazz) => {
+    console.log(clazz);
+});
+
+function render(template, data) {
+    Object.keys(data).forEach((key) => {
+        const value = data[key];
+        const re = new RegExp(`\{\{${key}\}\}`, "g");
+        template = template.replace(re, value);
+    });
+    return template;
+}
